@@ -13,3 +13,12 @@ Route::get('/home', function () {
 Route::get('/geniedashboard', function () {
     return view('genie.dashboard');
 });
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});

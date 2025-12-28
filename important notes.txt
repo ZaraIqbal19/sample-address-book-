@@ -1,0 +1,9 @@
+Routes List 
+
+
+User
+index= /home
+
+
+Genie (Admin)
+dashboard = /geniedashboard
