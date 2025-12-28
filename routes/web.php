@@ -9,3 +9,7 @@ Route::get('/', function () {
 Route::get('/home', function () {
     return view('user.index');
 });
+
+Route::get('/geniedashboard', function () {
+    return view('genie.dashboard');
+});
