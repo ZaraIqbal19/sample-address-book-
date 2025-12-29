@@ -20,6 +20,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="apple-touch-icon" sizes="76x76" href="Genie/img/apple-icon.png">
   <link rel="icon" type="image/png" href="Genie/img/favicon.png">
+  <link rel="stylesheet" href="{{ asset('css/vibrant-theme.css') }}">
+
   <title>
     Material Dashboard 2 by Creative Tim
   </title>
