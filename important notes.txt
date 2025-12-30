@@ -7,3 +7,5 @@ index= /home
 
 Genie (Admin)
 dashboard = /geniedashboard
+users info = /genie/users
+categories = /genie/category
