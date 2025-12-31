@@ -175,20 +175,20 @@ public function toggleNewArrival(Request $request)
     return response()->json(['status' => 'added']);
 }
 
-public function toggleBestSeller_old(Request $request)
-{
-    $productId = $request->product_id;
+    public function toggleBestSeller_old(Request $request)
+    {
+        $productId = $request->product_id;
 
-    $exists = BestSeller::where('product_id', $productId)->first();
+        $exists = BestSeller::where('product_id', $productId)->first();
 
-    if ($exists) {
-        $exists->delete();
-        return response()->json(['status' => 'removed']);
+        if ($exists) {
+            $exists->delete();
+            return response()->json(['status' => 'removed']);
+        }
+
+        BestSeller::create(['product_id' => $productId]);
+        return response()->json(['status' => 'added']);
     }
-
-    BestSeller::create(['product_id' => $productId]);
-    return response()->json(['status' => 'added']);
-}
 
     public function toggleBestSeller(Request $request)
     {
@@ -209,5 +209,4 @@ public function toggleBestSeller_old(Request $request)
 
         return response()->json(['status' => 'added']);
     }
-
 }
