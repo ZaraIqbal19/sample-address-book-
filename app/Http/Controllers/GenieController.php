@@ -17,7 +17,7 @@ use App\Models\BestSeller;
 class GenieController extends Controller
 {
  public function showRegisterForm() {
-        return view('auth.register'); 
+        return view('auth.register');
     }
 
     public function register(Request $request) {
@@ -175,7 +175,7 @@ public function toggleNewArrival(Request $request)
     return response()->json(['status' => 'added']);
 }
 
-public function toggleBestSeller(Request $request)
+public function toggleBestSeller_old(Request $request)
 {
     $productId = $request->product_id;
 
@@ -189,5 +189,25 @@ public function toggleBestSeller(Request $request)
     BestSeller::create(['product_id' => $productId]);
     return response()->json(['status' => 'added']);
 }
+
+    public function toggleBestSeller(Request $request)
+    {
+        $request->validate([
+            'product_id' => 'required|exists:products,id'
+        ]);
+
+        $bestSeller = BestSeller::where('product_id', $request->product_id)->first();
+
+        if ($bestSeller) {
+            $bestSeller->delete();
+            return response()->json(['status' => 'removed']);
+        }
+
+        BestSeller::create([
+            'product_id' => $request->product_id
+        ]);
+
+        return response()->json(['status' => 'added']);
+    }
 
 }
