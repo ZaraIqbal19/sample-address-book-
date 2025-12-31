@@ -1,16 +1,18 @@
 <?php
 
 namespace App\Models;
-
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class NewArrival extends Model
 {
-    protected $table = 'new_arrivals'; // matches your migration table
-    protected $fillable = ['product_id'];
+    use HasFactory;
 
-    public function product()
-    {
-        return $this->belongsTo(Product::class);
-    }
+    protected $table = 'new_arrivals';
+
+    protected $fillable = [
+        'product_id'
+    ];
+
+    public $timestamps = false;
 }

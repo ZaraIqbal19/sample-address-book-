@@ -158,36 +158,33 @@ public function productList(Request $request)
     return view('genie.product_info', compact('products','subcategories'));
 }
 
+   public function toggleBestSeller(Request $request)
+    {
+        $product = Product::findOrFail($request->product_id);
 
+        if ($product->bestSeller) {
+            $product->bestSeller()->delete();
 
-public function toggleNewArrival(Request $request)
-{
-    $productId = $request->product_id;
+            return response()->json(['status' => 'removed']);
+        }
 
-    $exists = NewArrival::where('product_id', $productId)->first();
+        $product->bestSeller()->create();
 
-    if ($exists) {
-        $exists->delete();
-        return response()->json(['status' => 'removed']);
+        return response()->json(['status' => 'added']);
     }
 
-    NewArrival::create(['product_id' => $productId]);
-    return response()->json(['status' => 'added']);
-}
+    public function toggleNewArrival(Request $request)
+    {
+        $product = Product::findOrFail($request->product_id);
 
-public function toggleBestSeller(Request $request)
-{
-    $productId = $request->product_id;
+        if ($product->newArrival) {
+            $product->newArrival()->delete();
 
-    $exists = BestSeller::where('product_id', $productId)->first();
+            return response()->json(['status' => 'removed']);
+        }
 
-    if ($exists) {
-        $exists->delete();
-        return response()->json(['status' => 'removed']);
+        $product->newArrival()->create();
+
+        return response()->json(['status' => 'added']);
     }
-
-    BestSeller::create(['product_id' => $productId]);
-    return response()->json(['status' => 'added']);
-}
-
 }

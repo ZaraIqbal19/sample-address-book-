@@ -96,12 +96,14 @@
 
                 {{-- Actions --}}
                 <td>
+                    {{-- ✅ NEW ARRIVAL --}}
                     <button
                         class="btn btn-sm btn-info mb-1 toggle-new-arrival"
                         data-id="{{ $product->id }}">
                         {{ $product->newArrival ? 'Remove New Arrival' : 'Add New Arrival' }}
                     </button>
 
+                    {{-- ✅ BEST SELLER --}}
                     <button
                         class="btn btn-sm btn-warning toggle-best-seller"
                         data-id="{{ $product->id }}">
@@ -124,13 +126,15 @@
 </table>
 
 {{-- 🔹 AJAX --}}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
 $(document).on('click', '.toggle-new-arrival', function () {
     let btn = $(this);
 
     $.ajax({
         url: '/genie/new-arrival/toggle',
-        type: 'POST',
+        method: 'POST',
         data: {
             _token: '{{ csrf_token() }}',
             product_id: btn.data('id')
@@ -150,7 +154,7 @@ $(document).on('click', '.toggle-best-seller', function () {
 
     $.ajax({
         url: '/genie/best-seller/toggle',
-        type: 'POST',
+        method: 'POST',
         data: {
             _token: '{{ csrf_token() }}',
             product_id: btn.data('id')

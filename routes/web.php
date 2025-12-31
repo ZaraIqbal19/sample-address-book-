@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GenieController;
+use App\Http\Controllers\UserController;
 
 // Public routes
 Route::get('/', function () {
@@ -70,9 +71,9 @@ Route::prefix('genie')->controller(GenieController::class)->group(function () {
 
     Route::get('/products', 'productList')->name('genie.product_info');
 
-    Route::post('/new-arrival/toggle', 'toggleNewArrival');
-    Route::post('/best-seller/toggle', 'toggleBestSeller');
+  Route::post('/best-seller/toggle', [GenieController::class, 'toggleBestSeller']);
+Route::post('/new-arrival/toggle', [GenieController::class, 'toggleNewArrival']);
 });
-
+Route::get('/user/products', [UserController::class, 'userProducts'])->name('user.products');
 
 });
