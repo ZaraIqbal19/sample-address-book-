@@ -66,6 +66,13 @@ Route::get('/genie/product/{subcategory}', [GenieController::class, 'productForm
 Route::post('/genie/product/store', [GenieController::class, 'storeProduct']);
 Route::get('/genie/product/create/{subcategory_id}', [GenieController::class, 'productForm'])
     ->name('genie.product.form');
+Route::prefix('genie')->controller(GenieController::class)->group(function () {
+
+    Route::get('/products', 'productList')->name('genie.product_info');
+
+    Route::post('/new-arrival/toggle', 'toggleNewArrival');
+    Route::post('/best-seller/toggle', 'toggleBestSeller');
+});
 
 
 });
