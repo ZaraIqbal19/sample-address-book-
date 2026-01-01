@@ -1,3 +1,5 @@
+@extends('user.layout')
+@section('content')
 <x-guest-layout>
     <x-authentication-card>
 
@@ -83,6 +85,7 @@
                             Forgot your password?
                         </a>
                     @endif
+                    
 
                     <!-- Login Button -->
                     <button type="submit"
@@ -96,3 +99,4 @@
 
     </x-authentication-card>
 </x-guest-layout>
+@endsection
