@@ -9,10 +9,15 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Category;
 use App\Models\SubCategory;
 use App\Models\Product;
+use App\Models\NewArrival;
+use App\Models\BestSeller;
+
+
+
 class GenieController extends Controller
 {
  public function showRegisterForm() {
-        return view('auth.register'); 
+        return view('auth.register');
     }
 
     public function register(Request $request) {
@@ -123,11 +128,85 @@ public function storeProduct(Request $request)
 }
 public function productForm($subcategory_id)
 {
-    // Fetch the subcategory from DB
+    // selected subcategory (for default selection)
     $subcategory = SubCategory::findOrFail($subcategory_id);
 
-    // Pass it to the view
-    return view('Genie.product', compact('subcategory'));
+    // fetch ALL subcategories for dropdown
+    $subcategories = SubCategory::all();
+
+    return view('Genie.product', compact('subcategory', 'subcategories'));
 }
 
+public function productList(Request $request)
+{
+    // Fetch unique subcategory names for dropdown
+    $subcategories = \DB::table('sub_categories')
+        ->select('name')
+        ->distinct()
+        ->orderBy('name')
+        ->get();
+
+    // Filter products by selected subcategory name
+    $products = Product::with(['subCategory','newArrival','bestSeller'])
+        ->when($request->subcategory_name, function($query) use ($request) {
+            $query->whereHas('subCategory', function($q) use ($request) {
+                $q->where('name', $request->subcategory_name);
+            });
+        })
+        ->get();
+
+    return view('genie.product_info', compact('products','subcategories'));
+}
+
+
+
+public function toggleNewArrival(Request $request)
+{
+    $productId = $request->product_id;
+
+    $exists = NewArrival::where('product_id', $productId)->first();
+
+    if ($exists) {
+        $exists->delete();
+        return response()->json(['status' => 'removed']);
+    }
+
+    NewArrival::create(['product_id' => $productId]);
+    return response()->json(['status' => 'added']);
+}
+
+    public function toggleBestSeller_old(Request $request)
+    {
+        $productId = $request->product_id;
+
+        $exists = BestSeller::where('product_id', $productId)->first();
+
+        if ($exists) {
+            $exists->delete();
+            return response()->json(['status' => 'removed']);
+        }
+
+        BestSeller::create(['product_id' => $productId]);
+        return response()->json(['status' => 'added']);
+    }
+
+    public function toggleBestSeller(Request $request)
+    {
+        $request->validate([
+            'product_id' => 'required|exists:products,id'
+        ]);
+
+        $bestSeller = BestSeller::where('product_id', $request->product_id)->first();
+
+        if ($bestSeller) {
+            $bestSeller->delete();
+            return response()->json(['status' => 'removed']);
+        }
+
+        BestSeller::create([
+            'product_id' => $request->product_id
+        ]);
+
+        return response()->json(['status' => 'added']);
+    }
 }

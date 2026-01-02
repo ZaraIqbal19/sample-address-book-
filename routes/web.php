@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GenieController;
+use App\Http\Controllers\UserController;
 
 // Public routes
 Route::get('/', function () {
@@ -66,6 +67,13 @@ Route::get('/genie/product/{subcategory}', [GenieController::class, 'productForm
 Route::post('/genie/product/store', [GenieController::class, 'storeProduct']);
 Route::get('/genie/product/create/{subcategory_id}', [GenieController::class, 'productForm'])
     ->name('genie.product.form');
+Route::prefix('genie')->controller(GenieController::class)->group(function () {
 
+    Route::get('/products', 'productList')->name('genie.product_info');
+
+  Route::post('/best-seller/toggle', [GenieController::class, 'toggleBestSeller']);
+Route::post('/new-arrival/toggle', [GenieController::class, 'toggleNewArrival']);
+});
+Route::get('/user/products', [UserController::class, 'userProducts'])->name('user.products');
 
 });

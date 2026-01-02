@@ -14,7 +14,20 @@
                     <form method="POST" action="/genie/product/store" enctype="multipart/form-data">
                         @csrf
 
-                        <input type="hidden" name="sub_category_id" value="{{ $subcategory->id }}">
+<!-- Sub Category Dropdown -->
+<div class="mb-3">
+    <label class="form-label fw-semibold">Select Sub Category</label>
+    <select name="sub_category_id" class="form-select" required>
+        <option value="">-- Select Sub Category --</option>
+
+        @foreach($subcategories as $subcategory)
+            <option value="{{ $subcategory->id }}">
+                {{ $subcategory->name }}
+            </option>
+        @endforeach
+
+    </select>
+</div>
 
                         <!-- Product Name -->
                         <div class="mb-3">
@@ -96,7 +109,7 @@
             let percentage = parseFloat(percentageInput.value);
 
             if (!isNaN(price) && !isNaN(percentage)) {
-                let saleAmount = (price * percentage / 100) + price;
+                let saleAmount = price - (price * percentage / 100) ;
                 saleAmountInput.value = saleAmount.toFixed(2);
             } else {
                 saleAmountInput.value = '';

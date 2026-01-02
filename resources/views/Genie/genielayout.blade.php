@@ -77,11 +77,11 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white " href="../pages/virtual-reality.html">
+          <a class="nav-link text-white " href="/genie/products">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
               <i class="material-icons opacity-10">view_in_ar</i>
             </div>
-            <span class="nav-link-text ms-1">Virtual Reality</span>
+            <span class="nav-link-text ms-1">Products Info</span>
           </a>
         </li>
         <li class="nav-item">
@@ -252,7 +252,7 @@
       </div>
     </nav>
     <!-- End Navbar -->
-     
+
     @yield('content')
 
       <div class="fixed-plugin">
@@ -329,6 +329,9 @@
     </div>
   </div>
   <!--   Core JS Files   -->
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+
   <script src="Genie/js/core/popper.min.js"></script>
   <script src="Genie/js/core/bootstrap.min.js"></script>
   <script src="Genie/js/plugins/perfect-scrollbar.min.js"></script>
@@ -594,6 +597,9 @@
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="Genie/js/material-dashboard.min.js?v=3.0.0"></script>
+
+  @stack('scripts')
+
 </body>
 
 </html>
