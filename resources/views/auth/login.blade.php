@@ -85,6 +85,15 @@
                             Forgot your password?
                         </a>
                     @endif
+                    <a href="{{ route('register') }}"
+                           style="
+                                color:#ff2f92;
+                                font-size:14px;
+                                font-weight:500;
+                                text-decoration:underline;
+                           ">
+                            new here?
+                        </a>
                     
 
                     <!-- Login Button -->

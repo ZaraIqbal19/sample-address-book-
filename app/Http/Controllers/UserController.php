@@ -124,5 +124,4 @@ class UserController extends Controller
     {
         return view('user.product-description', compact('product'));
     }
-    
 }

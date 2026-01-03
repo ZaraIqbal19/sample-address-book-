@@ -1,5 +1,10 @@
-@extends('user.layout') {{-- Ye layout me navbar/footer already include hoga --}}
+@extends('user.layout')
 @section('content')
+<br>
+<br>
+<br>
+<br>
+<br>
 
 <div class="container py-5" style="max-width: 500px;">
     <h1 class="text-center mb-4" style="color:#ff2f92; font-family:'Playfair Display', serif;">Address Book</h1>
