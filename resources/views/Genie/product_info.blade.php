@@ -111,6 +111,7 @@
                         data-id="{{ $product->id }}">
                         {{ $product->bestSeller ? 'Remove Best Seller' : 'Add Best Seller' }}
                     </button>
+
                 </td>
             </tr>
 
@@ -127,6 +128,7 @@
     </tbody>
 </table>
 
+@push('scripts')
 {{-- 🔹 AJAX --}}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -152,6 +154,7 @@ $(document).on('click', '.toggle-new-arrival', function () {
 });
 
 $(document).on('click', '.toggle-best-seller', function () {
+    console.log('bestSellerToggle');
     let btn = $(this);
 
     $.ajax({
@@ -171,5 +174,6 @@ $(document).on('click', '.toggle-best-seller', function () {
     });
 });
 </script>
+@endpush
 
 @endsection

@@ -17,7 +17,7 @@ use App\Models\Vendor;
 class GenieController extends Controller
 {
  public function showRegisterForm() {
-        return view('auth.register'); 
+        return view('auth.register');
     }
 
     public function register(Request $request) {
@@ -158,32 +158,54 @@ public function productList(Request $request)
     return view('genie.product_info', compact('products','subcategories'));
 }
 
-   public function toggleBestSeller(Request $request)
+
+
+public function toggleNewArrival(Request $request)
+{
+    $productId = $request->product_id;
+
+    $exists = NewArrival::where('product_id', $productId)->first();
+
+    if ($exists) {
+        $exists->delete();
+        return response()->json(['status' => 'removed']);
+    }
+
+    NewArrival::create(['product_id' => $productId]);
+    return response()->json(['status' => 'added']);
+}
+
+    public function toggleBestSeller_old(Request $request)
     {
-        $product = Product::findOrFail($request->product_id);
+        $productId = $request->product_id;
 
-        if ($product->bestSeller) {
-            $product->bestSeller()->delete();
+        $exists = BestSeller::where('product_id', $productId)->first();
 
+        if ($exists) {
+            $exists->delete();
             return response()->json(['status' => 'removed']);
         }
 
-        $product->bestSeller()->create();
-
+        BestSeller::create(['product_id' => $productId]);
         return response()->json(['status' => 'added']);
     }
 
-    public function toggleNewArrival(Request $request)
+    public function toggleBestSeller(Request $request)
     {
-        $product = Product::findOrFail($request->product_id);
+        $request->validate([
+            'product_id' => 'required|exists:products,id'
+        ]);
 
-        if ($product->newArrival) {
-            $product->newArrival()->delete();
+        $bestSeller = BestSeller::where('product_id', $request->product_id)->first();
 
+        if ($bestSeller) {
+            $bestSeller->delete();
             return response()->json(['status' => 'removed']);
         }
 
-        $product->newArrival()->create();
+        BestSeller::create([
+            'product_id' => $request->product_id
+        ]);
 
         return response()->json(['status' => 'added']);
     }
