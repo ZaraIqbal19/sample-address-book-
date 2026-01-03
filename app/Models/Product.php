@@ -9,7 +9,7 @@ class Product extends Model
 {
     
     protected $fillable = [
-        'sub_category_id','name','image','price','sale_start','sale_end','sale_percentage','sale_amount','sku'
+        'sub_category_id','name','image','description','price','sale_start','sale_end','sale_percentage','sale_amount','sku'
     ];
     // New Arrival relation
     public function newArrival()
@@ -34,4 +34,5 @@ class Product extends Model
     {
         return $this->bestSeller;
     }
+    
 }

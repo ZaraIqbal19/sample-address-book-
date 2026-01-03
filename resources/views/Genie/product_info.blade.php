@@ -58,7 +58,9 @@
                 </td>
 
                 {{-- Name --}}
-                <td>{{ $product->name }}</td>
+                <td style="color:black;background-color:black">
+                    <p>{{ $product->product_name }}</p>
+                </td>
 
                 {{-- SKU --}}
                 <td>{{ $product->sku }}</td>
