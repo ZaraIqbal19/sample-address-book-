@@ -11,7 +11,7 @@ use App\Models\SubCategory;
 use App\Models\Product;
 use App\Models\NewArrival;
 use App\Models\BestSeller;
-
+use App\Models\Vendor;
 
 
 class GenieController extends Controller
@@ -208,5 +208,29 @@ public function toggleNewArrival(Request $request)
         ]);
 
         return response()->json(['status' => 'added']);
+    }
+       public function vendorAdd()
+    {
+        $subcategories = SubCategory::orderBy('name')->get();
+
+        return view('Genie.vendoradd', compact('subcategories'));
+    }
+    public function vendorStore(Request $request)
+    {
+        $request->validate([
+            'name'             => 'required|string|max:255',
+            'email'            => 'required|email|unique:vendors,email',
+            'whatsapp_number'  => 'required|regex:/^[0-9+\s\-]{10,20}$/',
+            'subcategory_id'   => 'required|exists:sub_categories,id',
+        ]);
+
+        Vendor::create([
+            'name'            => $request->name,
+            'email'           => $request->email,
+            'whatsapp_number' => $request->whatsapp_number,
+            'subcategory_id'  => $request->subcategory_id,
+        ]);
+
+        return redirect()->back()->with('success', 'Vendor added successfully');
     }
 }

@@ -41,6 +41,18 @@
                             <input type="file" name="image" class="form-control" required>
                         </div>
 
+                        <!-- Product Description -->
+<div class="mb-3">
+    <label class="form-label fw-semibold">Product Description</label>
+    <textarea 
+        name="description" 
+        class="form-control" 
+        rows="4"
+        placeholder="Enter product description"
+        required
+    ></textarea>
+</div>
+
                         <!-- Price -->
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Price</label>
