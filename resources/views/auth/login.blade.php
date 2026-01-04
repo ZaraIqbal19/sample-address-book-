@@ -1,111 +1,97 @@
 @extends('user.layout')
 @section('content')
-<x-guest-layout>
-    <x-authentication-card>
 
-        <!-- Logo -->
-        <x-slot name="logo">
+<div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center"
+     style="background: linear-gradient(135deg, #fff1f7, #f8f9ff);">
+
+    <div class="row w-100 shadow-lg rounded-4 overflow-hidden"
+         style="max-width: 900px; background:#ffffff;">
+
+        <!-- Image Section -->
+        <div class="col-md-6 d-none d-md-block p-0">
+            <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9"
+                 class="img-fluid h-100 w-100"
+                 style="object-fit: cover;">
+        </div>
+
+        <!-- Login Form -->
+        <div class="col-md-6 p-5">
+
             <h1 class="text-center mb-3"
                 style="
                     font-family: 'Playfair Display', serif;
-                    font-size: 32px;
+                    font-size: 34px;
                     font-weight: 600;
-                    letter-spacing: 1px;
                     color: #ff2f92;
                 ">
                 Address Book
             </h1>
-        </x-slot>
 
-        <!-- Validation Errors -->
-        <x-validation-errors class="mb-3" />
+            <p class="text-center mb-4 text-muted">
+                Welcome back! Login to continue
+            </p>
 
-        <!-- Status Message -->
-        @session('status')
-            <div class="mb-3 text-success small">
-                {{ $value }}
-            </div>
-        @endsession
+            <!-- Errors -->
+            <x-validation-errors class="mb-3" />
 
-        <!-- Form Card -->
-        <div class="p-4 rounded" style="background:#111;">
             <form method="POST" action="{{ route('login') }}">
                 @csrf
 
                 <!-- Email -->
                 <div class="mb-3">
-                    <x-label for="email"
-                             value="Email"
-                             class="fw-semibold"
-                             style="color:#ff2f92;" />
-
-                    <x-input id="email"
-                             type="email"
-                             name="email"
-                             :value="old('email')"
-                             required autofocus
-                             class="block w-100 mt-1 bg-white text-dark border" />
+                    <label class="form-label text-muted fw-semibold">Email</label>
+                    <input type="email"
+                           name="email"
+                           class="form-control rounded-3"
+                           value="{{ old('email') }}"
+                           required autofocus>
                 </div>
 
                 <!-- Password -->
                 <div class="mb-3">
-                    <x-label for="password"
-                             value="Password"
-                             class="fw-semibold"
-                             style="color:#ff2f92;" />
-
-                    <x-input id="password"
-                             type="password"
-                             name="password"
-                             required
-                             class="block w-100 mt-1 bg-white text-dark border" />
+                    <label class="form-label text-muted fw-semibold">Password</label>
+                    <input type="password"
+                           name="password"
+                           class="form-control rounded-3"
+                           required>
                 </div>
 
-                <!-- Remember Me -->
-                <div class="block mt-3">
-                    <label for="remember_me" class="flex items-center">
-                        <x-checkbox id="remember_me" name="remember" />
-                        <span class="ms-2 text-sm" style="color:#ffffff;">
-                            Remember me
-                        </span>
+                <!-- Remember -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <label class="d-flex align-items-center">
+                        <input type="checkbox" name="remember" class="me-2">
+                        <span class="text-muted">Remember me</span>
                     </label>
+
+                    <a href="{{ route('password.request') }}"
+                       style="color:#ff2f92; font-size:14px;">
+                        Forgot password?
+                    </a>
                 </div>
 
-                <!-- Actions -->
-                <div class="d-flex justify-content-between align-items-center mt-4">
-                    <!-- Forgot Password -->
-                    @if (Route::has('password.request'))
-                        <a href="{{ route('password.request') }}"
-                           style="
-                                color:#ff2f92;
-                                font-size:14px;
-                                font-weight:500;
-                                text-decoration:underline;
-                           ">
-                            Forgot your password?
-                        </a>
-                    @endif
+                <!-- Button -->
+                <button type="submit"
+                        class="btn w-100 text-white py-2"
+                        style="
+                            background:#ff2f92;
+                            border-radius:30px;
+                            font-weight:500;
+                        ">
+                    Log in
+                </button>
+
+                <!-- Register -->
+                <p class="text-center mt-4 mb-0" style="font-size:14px;">
+                    New here?
                     <a href="{{ route('register') }}"
-                           style="
-                                color:#ff2f92;
-                                font-size:14px;
-                                font-weight:500;
-                                text-decoration:underline;
-                           ">
-                            new here?
-                        </a>
-                    
+                       style="color:#ff2f92; font-weight:500;">
+                        Create an account
+                    </a>
+                </p>
 
-                    <!-- Login Button -->
-                    <button type="submit"
-                            class="btn text-white px-4 ms-3"
-                            style="background:#ff2f92;">
-                        Log in
-                    </button>
-                </div>
             </form>
         </div>
+    </div>
+</div>
 
-    </x-authentication-card>
-</x-guest-layout>
 @endsection

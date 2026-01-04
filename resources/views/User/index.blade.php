@@ -45,6 +45,16 @@
         padding: 30px;
         border-radius: 10px;
     }
+    <style>
+.category-card {
+    transition: all 0.3s ease;
+}
+.category-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0,0,0,.15);
+}
+</style>
+
 </style>
 
 <!-- Carousel -->
@@ -57,7 +67,8 @@
             <div class="carousel-caption d-flex flex-column justify-content-center text-start h-100 px-5">
                 <h1 class="display-2 fw-bold">Cosmetics Collection</h1>
                 <p class="text-white-50 fs-4">Premium cosmetics for a flawless look.</p>
-                <a href="{{ route('cosmetics') }}" class="btn btn-primary btn-lg mt-3">Explore Cosmetics</a>
+               <a href="#" class="btn btn-primary">Explore Cosmetics</a>
+
             </div>
         </div>
 
@@ -67,48 +78,66 @@
             <div class="carousel-caption d-flex flex-column justify-content-center text-start h-100 px-5">
                 <h1 class="display-2 fw-bold">Jewellery Collection</h1>
                 <p class="text-white-50 fs-4">Timeless elegance for every occasion.</p>
-                <a href="{{ route('jewellery') }}" class="btn btn-primary btn-lg mt-3">Explore Jewellery</a>
+               <a href="#" class="btn btn-primary">Explore Jewellery</a>
+
             </div>
         </div>
 
     </div>
 </div>
 
-<!-- Categories Section -->
+
+    @php
+    $categories = [
+        [
+            'name' => 'Cosmetics',
+            'link' => '#',
+            'image' => 'https://images.pexels.com/photos/2721977/pexels-photo-2721977.jpeg'
+        ],
+        [
+            'name' => 'Jewellery',
+            'link' => '#',
+            'image' => 'https://images.pexels.com/photos/7598170/pexels-photo-7598170.jpeg'
+        ],
+    ];
+@endphp
+
 <div class="container py-5">
-    <div class="text-center mb-5 section-title">
-        <h5>Categories</h5>
-        <h1>Our Collections</h1>
+    <div class="text-center mb-5">
+        <h5 class="text-muted">Categories</h5>
+        <h1 class="fw-bold">Our Collections</h1>
     </div>
 
     <div class="row g-4">
-        @php
-            $categories = [
-                [
-                    'name' => 'Cosmetics',
-                    'route' => route('cosmetics'),
-                    'image' => 'https://images.pexels.com/photos/2721977/pexels-photo-2721977.jpeg'
-                ],
-                [
-                    'name' => 'Jewellery',
-                    'route' => route('jewellery'),
-                    'image' => 'https://images.pexels.com/photos/7598170/pexels-photo-7598170.jpeg'
-                ],
-            ];
-        @endphp
-
         @foreach($categories as $category)
-            <div class="col-md-6">
-                <div class="position-relative rounded overflow-hidden">
-                    <img src="{{ $category['image'] }}" class="w-100" style="height:400px; object-fit:cover;">
-                    <div class="card-overlay position-absolute w-100 h-100 bottom-0 p-4 d-flex flex-column justify-content-end">
-                        <h3 class="text-white">{{ $category['name'] }}</h3>
-                        <a href="{{ $category['route'] }}" class="btn btn-outline-light w-fit">View</a>
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ $category['link'] }}" class="text-decoration-none">
+                    <div class="card border-0 shadow-sm h-100 category-card">
+                        <img src="{{ $category['image'] }}"
+                             class="card-img-top"
+                             style="height:260px; object-fit:cover;">
+
+                        <div class="card-body text-center">
+                            <h5 class="fw-semibold text-dark">
+                                {{ $category['name'] }}
+                            </h5>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
         @endforeach
     </div>
 </div>
+
+<style>
+.category-card {
+    transition: all 0.3s ease;
+}
+.category-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0,0,0,.15);
+}
+</style>
+
 
 @endsection
