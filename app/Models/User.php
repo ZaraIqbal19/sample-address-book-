@@ -10,8 +10,9 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-
-
+use App\Models\Order;
+use App\Models\Wishlist;
+use App\Models\Cart;
 
 class User extends Authenticatable
 
@@ -67,5 +68,18 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
-    }
+    }   
+public function orders()
+{
+    return $this->hasMany(Order::class);
+}
+
+public function wishlists()
+{
+    return $this->hasMany(Wishlist::class);
+}
+public function carts()
+{
+    return $this->hasMany(Cart::class);
+}
 }

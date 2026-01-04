@@ -5,6 +5,9 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\NewArrival;
 use App\Models\BestSeller;
 use App\Models\SubCategory;
+use App\Models\OrderItem;
+use App\Models\Wishlist;
+use Illuminate\Support\Facades\Auth;
 class Product extends Model
 {
     
@@ -34,4 +37,23 @@ class Product extends Model
     {
         return $this->bestSeller;
     }
+    public function orderItems()
+{
+    return $this->hasMany(OrderItem::class);
+}
+
+public function wishlists()
+{
+    return $this->hasMany(Wishlist::class);
+}
+
+public function isInWishlist()
+{
+    $user = Auth::user();
+    if(!$user) return false; // Guest users can't have a wishlist
+
+    return \App\Models\Wishlist::where('user_id', $user->id)
+                               ->where('product_id', $this->id)
+                               ->exists();
+}
 }

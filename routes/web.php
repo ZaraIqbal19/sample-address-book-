@@ -86,14 +86,20 @@ Route::middleware([
 
     // User products
     Route::get('/user/products', [UserController::class, 'userProducts'])->name('user.products');
-
     Route::post('/cart/add', [UserController::class, 'addToCart'])->name('cart.add');
     Route::post('/cart/increase', [UserController::class, 'increaseCart'])->name('cart.increase');
     Route::post('/cart/decrease', [UserController::class, 'decreaseCart'])->name('cart.decrease');
     Route::delete('/cart/remove', [UserController::class, 'removeFromCart'])->name('cart.remove');
-
+Route::post('/cart/update', [UserController::class, 'updateCart'])->name('cart.update');
+Route::delete('/cart/remove', [UserController::class, 'removeCart'])->name('cart.remove');
 Route::get('/product-description/{product}', 
     [UserController::class, 'productDescription']
 )->name('product.description');
-
+Route::post('/wishlist/toggle', [UserController::class, 'toggleWishlist']);
+Route::get('/cart', [UserController::class, 'cart'])->name('cart.view');
+Route::get('/checkout', [App\Http\Controllers\UserController::class, 'checkout'])
+     ->name('checkout.index');
+     Route::post('/place-order', [UserController::class, 'placeOrder'])
+     ->name('place.order');
+     
 });
