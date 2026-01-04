@@ -233,4 +233,10 @@ public function toggleNewArrival(Request $request)
 
         return redirect()->back()->with('success', 'Vendor added successfully');
     }
+    public function vendorshow()
+{
+    $vendors = Vendor::with('subcategory.products')->get();
+
+    return view('Genie.vendorshow', compact('vendors'));
+}
 }

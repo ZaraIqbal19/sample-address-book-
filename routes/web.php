@@ -61,6 +61,8 @@ Route::middleware([GenieMiddleware::class])->group(function () {
 
     Route::post('/genie/vendor/store', [GenieController::class, 'vendorStore'])
          ->name('genie.vendor.store');
+           Route::get('/genie/vendorshow', [GenieController::class, 'vendorshow'])
+        ->name('genie.vendorshow');
 });
 
 Route::middleware([
