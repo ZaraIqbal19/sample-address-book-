@@ -1,7 +1,16 @@
 @extends('user.layout')
 
 @section('content')
+
 <div class="container py-5 product-detail">
+
+    {{-- CLOSE / BACK BUTTON --}}
+    <div class="d-flex justify-content-end mb-3">
+        <button class="btn btn-outline-dark close-page rounded-circle"
+                style="width:40px; height:40px; font-size:22px; line-height:1;">
+            &times;
+        </button>
+    </div>
 
     <div class="row">
         {{-- Product Image --}}
@@ -16,12 +25,12 @@
             <h2 class="fw-bold">{{ ucfirst($product->name) }}</h2>
 
             {{-- Price --}}
-            <h4 class="mb-3">Rs {{ number_format($product->price,2) }}</h4>
+            <h4 class="mb-3">Rs {{ number_format($product->price, 2) }}</h4>
 
             {{-- Stock Status --}}
             <p id="stockStatus" class="fw-bold text-success">In Stock</p>
 
-            {{-- Quantity Box (SYNCED WITH CART) --}}
+            {{-- Quantity Box --}}
             <div class="d-flex align-items-center mb-3 qty-box"
                  data-product="{{ $product->id }}"
                  data-sku="{{ $product->sku }}">
@@ -55,20 +64,20 @@
     </div>
 </div>
 
-{{-- Modal --}}
+{{-- CART MODAL --}}
 <div class="modal fade" id="cartModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Cart Update</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body" id="cartModalBody"></div>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cart Update</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="cartModalBody"></div>
+        </div>
     </div>
-  </div>
 </div>
 
-{{-- JS --}}
+{{-- SCRIPTS --}}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -77,8 +86,13 @@ $(document).ready(function(){
 
     function showModal(msg){
         $('#cartModalBody').text(msg);
-        new bootstrap.Modal('#cartModal').show();
+        new bootstrap.Modal(document.getElementById('cartModal')).show();
     }
+
+    // BACK BUTTON
+    $('.close-page').click(function(){
+        window.history.back();
+    });
 
     // PLUS
     $('.plus').click(function(){
