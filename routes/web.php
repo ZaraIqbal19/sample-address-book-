@@ -80,9 +80,8 @@ Route::middleware([
     })->name('dashboard');
 
     // User home page
-    Route::get('/home', function () {
-        return view('user.index');
-    })->name('user.home');
+Route::get('/home', [UserController::class, 'homePage'])->name('user.home');
+
 
     // User products
     Route::get('/user/products', [UserController::class, 'userProducts'])->name('user.products');

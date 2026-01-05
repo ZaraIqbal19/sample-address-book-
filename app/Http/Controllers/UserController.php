@@ -246,4 +246,14 @@ public function placeOrder()
         return redirect()->route('user.cart')->with('error', 'Failed to place order: ' . $e->getMessage());
     }
 }
+public function index()
+{
+    $bestSellers = Product::whereIn('id', \DB::table('best_sellers')->pluck('product_id'))->get();
+    $newArrivals = Product::whereIn('id', \DB::table('new_arrivals')->pluck('product_id'))->get();
+    $onSale = Product::whereNotNull('discount_price')->whereColumn('discount_price','<','price')->get();
+    $inStock = Product::where('sku', '>', 0)->get();
+
+    return view('user.index', compact('bestSellers','newArrivals','onSale','inStock'));
+}
+
 }
