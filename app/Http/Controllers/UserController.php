@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 class UserController extends Controller
 {
     public function userProducts(Request $request)
@@ -204,56 +205,107 @@ public function checkout()
 
     return view('user.checkout', compact('cartItems', 'subtotal', 'tax', 'shipping', 'grandTotal'));
 }
+
 public function placeOrder()
 {
     $user = auth()->user();
-    $cartItems = Cart::with('product')->where('user_id', $user->id)->get();
+
+    // Fetch cart items
+    $cartItems = DB::table('carts')
+        ->join('products', 'carts.product_id', '=', 'products.id')
+        ->where('carts.user_id', $user->id)
+        ->select('carts.id', 'carts.product_id', 'carts.quantity', 'products.price')
+        ->get();
 
     if ($cartItems->isEmpty()) {
-        return redirect()->route('user.cart')->with('error', 'Your cart is empty.');
+        return redirect()->route('user.products')
+            ->with('error', 'Your cart is empty.');
     }
 
     DB::beginTransaction();
+
     try {
-        // Create order
-        $order = Order::create([
-            'user_id' => $user->id,
-            'subtotal' => $cartItems->sum(fn($item) => $item->product->price * $item->quantity),
-            'tax' => 0,
-            'shipping' => 200,
-            'grand_total' => $cartItems->sum(fn($item) => $item->product->price * $item->quantity) + 200,
-            'status' => 'pending',
+        $subtotal = $cartItems->sum(fn ($item) => $item->price * $item->quantity);
+
+        // Insert order
+        $orderId = DB::table('orders')->insertGetId([
+            'user_id'        => $user->id,
+            'order_number'   => 'ORD-' . strtoupper(Str::random(10)),
+            'subtotal'       => $subtotal,
+            'discount'       => 0,
+            'tax'            => 0,
+            'grandTotal'     => $subtotal, // your column name in migration
+            'payment_method' => 'COD',
+            'order_status'   => 'pending', // match your migration
+            'created_at'     => now(),
+            'updated_at'     => now(),
         ]);
 
-        // Create order items
+        // Insert order items
         foreach ($cartItems as $item) {
-            OrderItem::create([
-                'order_id' => $order->id,
+            DB::table('order_items')->insert([
+                'order_id'   => $orderId,
                 'product_id' => $item->product_id,
-                'quantity' => $item->quantity,
-                'price' => $item->product->price,
+                'quantity'   => $item->quantity,
+                'price'      => $item->price,
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
         }
 
-        // Clear user cart
-        Cart::where('user_id', $user->id)->delete();
+        // Delete cart items by IDs
+        $cartIds = $cartItems->pluck('id')->toArray();
+        DB::table('carts')->whereIn('id', $cartIds)->delete();
 
         DB::commit();
 
-        return redirect()->route('user.orders')->with('success', 'Order placed successfully!');
-    } catch (\Exception $e) {
+        // ✅ Redirect to GET route properly
+        return redirect()->route('user.products')
+            ->with('success', 'Order Placed Successfully!');
+
+    } catch (\Throwable $e) {
         DB::rollBack();
-        return redirect()->route('user.cart')->with('error', 'Failed to place order: ' . $e->getMessage());
+
+        return redirect()->back()
+            ->with('error', 'Something went wrong while placing order.');
     }
 }
+
+
 public function index()
 {
     $bestSellers = Product::whereIn('id', \DB::table('best_sellers')->pluck('product_id'))->get();
     $newArrivals = Product::whereIn('id', \DB::table('new_arrivals')->pluck('product_id'))->get();
-    $onSale = Product::whereNotNull('discount_price')->whereColumn('discount_price','<','price')->get();
+    $onSale = Product::whereNotNull('discounted_price')->whereColumn('discounted_price','<','price')->get();
     $inStock = Product::where('sku', '>', 0)->get();
 
     return view('user.index', compact('bestSellers','newArrivals','onSale','inStock'));
 }
+ public function showContactForm()
+    {
+        return view('User.contact');
+    }
 
+    // Handle form submission
+    public function submitContactForm(Request $request)
+    {
+        $request->validate([
+            'name'    => 'required|string|max:255',
+            'email'   => 'required|email|max:255',
+            'subject' => 'nullable|string|max:255',
+            'message' => 'required|string',
+        ]);
+
+        // Save to database using DB facade
+        DB::table('contacts')->insert([
+            'name'      => $request->name,
+            'email'     => $request->email,
+            'subject'   => $request->subject,
+            'message'   => $request->message,
+            'created_at'=> now(),
+            'updated_at'=> now(),
+        ]);
+
+        return redirect()->back()->with('success', 'Your message has been sent successfully!');
+    }
 }

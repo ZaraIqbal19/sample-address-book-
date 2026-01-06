@@ -7,7 +7,7 @@
   <link rel="apple-touch-icon" sizes="76x76" href="Genie/img/apple-icon.png">
   <link rel="icon" type="image/png" href="Genie/img/favicon.png">
   <link rel="stylesheet" href="{{ asset('css/vibrant-theme.css') }}">
-  <title>Material Dashboard 2 - Address Book</title>
+  <title> Address Book</title>
 
   <!-- Fonts and icons -->
   <link rel="stylesheet" type="text/css"
@@ -71,33 +71,54 @@
             <span class="nav-link-text ms-1">Products Info</span>
           </a>
         </li>
+        <!-- Vendors -->
+         <li class="nav-item">
+          <a class="nav-link text-white" href="/genie/vendor/add">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">person</i>
+            </div>
+            <span class="nav-link-text ms-1">Add Vendors</span>
+          </a>
+        </li>
+          <!-- Show Vendors -->
+         <li class="nav-item">
+          <a class="nav-link text-white" href="/genie/vendorshow">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">people</i>
+            </div>
+            <span class="nav-link-text ms-1">Vendors Info</span>
+          </a>
+        </li>
+        <!-- Order Details -->
+         <li class="nav-item">
+          <a class="nav-link text-white" href="/genie/orders">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">list</i>
+            </div>
+            <span class="nav-link-text ms-1">Order Record</span>
+          </a>
+        </li>
         <!-- Account Pages -->
         <li class="nav-item mt-3">
           <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Account pages</h6>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white" href="../pages/profile.html">
+          <a class="nav-link text-white" href="/genie/profile">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
               <i class="material-icons opacity-10">person</i>
             </div>
             <span class="nav-link-text ms-1">Profile</span>
           </a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link text-white" href="../pages/sign-in.html">
-            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">login</i>
-            </div>
-            <span class="nav-link-text ms-1">Sign In</span>
-          </a>
-        </li>
+   
       </ul>
     </div>
     <div class="sidenav-footer position-absolute w-100 bottom-0">
       <div class="mx-3">
-        <a class="btn bg-gradient-primary mt-4 w-100"
-          href="https://www.creative-tim.com/product/material-dashboard-pro?ref=sidebarfree" type="button">Upgrade to
-          Pro</a>
+        <form action="/logout" method="post" class="d-flex align-items-center">
+              @csrf
+              <button type="submit" class="btn btn-sm btn-primary w-100">Sign Out</button>
+            </form>
       </div>
     </div>
   </aside>
@@ -109,23 +130,29 @@
     <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur"
       navbar-scroll="true">
       <div class="container-fluid py-1 px-3">
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Dashboard</li>
-          </ol>
-          <h6 class="font-weight-bolder mb-0">Dashboard</h6>
-        </nav>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+    <li class="breadcrumb-item text-sm">
+      <a class="opacity-5 text-dark" href="javascript:;">Pages</a>
+    </li>
+    <li class="breadcrumb-item text-sm text-dark active" aria-current="page">
+      @yield('page-name', 'Dashboard')
+    </li>
+  </ol>
+  <h6 class="font-weight-bolder mb-0">@yield('page-name', 'Dashboard')</h6>
+</nav>
+
+
 
         <!-- Navbar Right -->
         <ul class="navbar-nav ms-auto justify-content-end">
           <!-- User Logout -->
-          <li class="nav-item d-flex align-items-center">
+          <!-- <li class="nav-item d-flex align-items-center">
             <form action="/logout" method="post" class="d-flex align-items-center">
               @csrf
               <button type="submit" class="btn btn-sm btn-primary">Sign Out</button>
             </form>
-          </li>
+          </li> -->
           <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
             <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
               <div class="sidenav-toggler-inner">

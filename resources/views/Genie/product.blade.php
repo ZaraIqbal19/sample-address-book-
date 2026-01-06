@@ -1,4 +1,5 @@
 @extends('genie.genielayout')
+@section('page-name', 'Product')
 
 @section('content')
 <div class="container my-5">

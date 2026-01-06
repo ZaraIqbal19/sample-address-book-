@@ -63,6 +63,8 @@ Route::middleware([GenieMiddleware::class])->group(function () {
          ->name('genie.vendor.store');
            Route::get('/genie/vendorshow', [GenieController::class, 'vendorshow'])
         ->name('genie.vendorshow');
+            Route::get('/genie/orders', [GenieController::class, 'orders'])->name('genie.orders');
+Route::get('/genie/profile', function () {return view('genie.profile');});
 });
 
 Route::middleware([
@@ -80,7 +82,7 @@ Route::middleware([
     })->name('dashboard');
 
     // User home page
-Route::get('/home', [UserController::class, 'homePage'])->name('user.home');
+Route::get('/home', [UserController::class, 'index'])->name('user.home');
 
 
     // User products
@@ -100,5 +102,8 @@ Route::get('/checkout', [App\Http\Controllers\UserController::class, 'checkout']
      ->name('checkout.index');
      Route::post('/place-order', [UserController::class, 'placeOrder'])
      ->name('place.order');
-     
+     // routes/web.php
+Route::get('/contact', [UserController::class, 'showContactForm'])->name('contact.show');
+Route::post('/contact', [UserController::class, 'submitContactForm'])->name('contact.submit');
+
 });

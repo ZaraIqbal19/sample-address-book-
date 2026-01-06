@@ -1,4 +1,5 @@
 @extends('genie.genielayout')
+@section('page-name', 'Subcategory')
 @section('content')
 <div class="container mt-5">
     <div class="row justify-content-center">

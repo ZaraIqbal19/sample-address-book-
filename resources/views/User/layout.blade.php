@@ -43,7 +43,7 @@
         }
 
         .navbar-nav .nav-link {
-            font-size: 1.2rem;
+            font-size: 0.6rem;
             font-weight: 600;
             color: #ff2a95 !important;
             transition: 0.3s;
@@ -96,7 +96,7 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav mx-auto">
                 <a href="/home" class="nav-item nav-link">Home</a>
-                <a href="/shop" class="nav-item nav-link">Shop</a>
+                <a href="/user/products" class="nav-item nav-link">Shop</a>
                 <a href="/contact" class="nav-item nav-link">Contact</a>
             </div>
 
@@ -145,7 +145,7 @@
 </nav>
 
 <!-- Content -->
-<div class="content-area bg-light min-vh-100">
+<div class="content-area bg-dark min-vh-100">
     @yield('content')
 </div>
 

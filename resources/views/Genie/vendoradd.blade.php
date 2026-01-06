@@ -1,4 +1,6 @@
 @extends('genie.genielayout')
+
+@section('page-name', 'Vendor Add')
 @section('content')
 
 <div class="container d-flex justify-content-center align-items-center min-vh-100">

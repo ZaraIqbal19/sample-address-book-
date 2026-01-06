@@ -1,4 +1,6 @@
 @extends('genie.genielayout')
+
+@section('page-name', 'Users')
 @section('content')
 
 <div class="container py-5">

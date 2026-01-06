@@ -1,161 +1,41 @@
 <?php
 
-namespace App\Http\Controllers;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-use Illuminate\Http\Request;
-use App\Models\Category;
-use App\Models\SubCategory;
-use App\Models\Product;
-use App\Models\Cart;
-use App\Models\GenieNotification;
-
-class UserController extends Controller
+return new class extends Migration
 {
     /**
-     * Show all products with optional subcategory filter
+     * Run the migrations.
      */
-    public function userProducts(Request $request)
+    public function up(): void
     {
-        $subcategories = SubCategory::select('name')->distinct()->orderBy('name')->get();
+        Schema::create('products', function (Blueprint $table) {
+            $table->id(); // id
+            $table->unsignedBigInteger('sub_category_id'); // foreign key to subcategories
+            $table->string('name'); // product name
+            $table->string('image')->nullable(); // image path
+            $table->text('description')->nullable(); // description
+            $table->decimal('price', 10, 2); // original price
+            $table->decimal('discounted_price', 10, 2)->default(0); // discounted price
+            $table->date('sale_start')->nullable(); // sale start date
+            $table->date('sale_end')->nullable(); // sale end date
+            $table->unsignedInteger('sale_percentage')->default(0); // sale percentage
+            $table->decimal('sale_amount', 10, 2)->nullable(); // sale amount after discount
+            $table->string('sku')->nullable(); // SKU
+            $table->timestamps(); // created_at and updated_at
 
-        $products = Product::with('subCategory')
-            ->when($request->subcategory_name, function ($query) use ($request) {
-                $query->whereHas('subCategory', function ($q) use ($request) {
-                    $q->where('name', $request->subcategory_name);
-                });
-            })
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return view('user.products', compact('products', 'subcategories'));
+            // Optional: foreign key constraint
+            // $table->foreign('sub_category_id')->references('id')->on('sub_categories')->onDelete('cascade');
+        });
     }
 
     /**
-     * Add product to cart
+     * Reverse the migrations.
      */
-    public function addToCart(Request $request)
+    public function down(): void
     {
-        $product = Product::findOrFail($request->product_id);
-        $requestedQty = (int)$request->quantity;
-        $availableQty = $product->sku;
-
-        $addQty = min($requestedQty, $availableQty);
-
-        Cart::updateOrCreate(
-            ['user_id' => auth()->id(), 'product_id' => $product->id],
-            ['quantity' => $addQty]
-        );
-
-        $remainingQty = max(0, $requestedQty - $availableQty);
-
-        if ($remainingQty > 0) {
-            GenieNotification::create([
-                'user_id' => auth()->id(),
-                'product_id' => $product->id,
-                'requested_qty' => $requestedQty,
-                'available_qty' => $availableQty,
-            ]);
-        }
-
-        return response()->json([
-            'added_qty' => $addQty,
-            'remaining_qty' => $remainingQty
-        ]);
+        Schema::dropIfExists('products');
     }
-
-    /**
-     * Increase cart quantity
-     */
-    public function increaseCart(Request $request)
-    {
-        $cart = Cart::where('user_id', auth()->id())
-                    ->where('product_id', $request->product_id)
-                    ->firstOrFail();
-
-        $product = $cart->product;
-        $cart->quantity += 1;
-        $cart->save();
-
-        $remainingQty = max(0, $cart->quantity - $product->sku);
-
-        if ($remainingQty > 0) {
-            GenieNotification::create([
-                'user_id' => auth()->id(),
-                'product_id' => $product->id,
-                'requested_qty' => $cart->quantity,
-                'available_qty' => $product->sku,
-            ]);
-        }
-
-        return response()->json([
-            'added_qty' => min($cart->quantity, $product->sku),
-            'remaining_qty' => $remainingQty
-        ]);
-    }
-
-    /**
-     * Decrease cart quantity
-     */
-    public function decreaseCart(Request $request)
-    {
-        $cart = Cart::where('user_id', auth()->id())
-                    ->where('product_id', $request->product_id)
-                    ->firstOrFail();
-
-        if ($cart->quantity <= 1) {
-            $cart->delete();
-            return response()->json(['added_qty' => 0, 'remaining_qty' => 0]);
-        }
-
-        $cart->quantity -= 1;
-        $cart->save();
-
-        $product = $cart->product;
-        $remainingQty = max(0, $cart->quantity - $product->sku);
-
-        return response()->json([
-            'added_qty' => $cart->quantity,
-            'remaining_qty' => $remainingQty
-        ]);
-    }
-
-    /**
-     * Remove product from cart
-     */
-    public function removeFromCart(Request $request)
-    {
-        Cart::where('user_id', auth()->id())
-            ->where('product_id', $request->product_id)
-            ->delete();
-
-        return response()->json(['removed' => true]);
-    }
-
-    /**
-     * Product description page
-     */
-    public function productDescription(Product $product)
-    {
-        return view('user.product-description', compact('product'));
-    }
-
-    /**
-     * Show products by category
-     */
-    public function productsByCategory($categorySlug = null)
-    {
-        $categorySlug = $categorySlug ?? request()->segment(1);
-
-        $category = Category::where('slug', $categorySlug)->firstOrFail();
-
-        // Get all subcategory IDs for this category
-        $subCategoryIds = $category->subCategories()->pluck('id');
-
-        // Get products belonging to these subcategories
-        $products = Product::whereIn('sub_category_id', $subCategoryIds)
-                           ->orderBy('created_at', 'desc')
-                           ->get();
-
-        return view('user.products', compact('products', 'category'));
-    }
-}
+};

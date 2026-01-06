@@ -1,6 +1,6 @@
 @extends('genie.genielayout')
 
-@section('page-name', 'Dashboard')
+@section('page-name', 'Profile')
 @section('content')
 
 <div class="container-fluid py-5" style="background:#f7f8fc; min-height:100vh;">
@@ -25,13 +25,13 @@
                 </div>
 
                 <!-- Welcome Text -->
-                <h1 class="fw-bold mb-2 text-uppercase" style="color:#2b2b2b;">
-                    Welcome back, {{ auth()->user()->name }}
+                <h1 class="fw-semibold mb-2 text-uppercase" style="color:#2b2b2b;">
+                    Welcome {{ auth()->user()->name }},
                 </h1>
-<hr>
-<br>
+                <hr>
+
                 <p class="fs-5 mb-4" style="color:#6b7280;">
-                    We're glad to see you on your dashboard.
+                    We're glad to see you on your profile page.
                 </p>
 
                 <!-- Role Info -->

@@ -28,9 +28,10 @@
 
                             {{-- Product --}}
                             <div class="col-md-5 d-flex align-items-center">
-                                <img src="{{ asset($item->product->image) }}"
-                                     class="rounded"
-                                     style="width:80px;height:80px;object-fit:cover;">
+                             <img src="{{ asset('products/' . $item->product->image) }}"
+     class="rounded"
+     style="width:80px;height:80px;object-fit:cover;">
+
                                 <div class="ms-3">
                                     <h6 class="mb-1 text-dark">{{ $item->product->name }}</h6>
                                     <small class="text-muted">

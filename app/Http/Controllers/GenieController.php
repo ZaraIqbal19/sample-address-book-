@@ -12,6 +12,7 @@ use App\Models\Product;
 use App\Models\NewArrival;
 use App\Models\BestSeller;
 use App\Models\Vendor;
+use Illuminate\Support\Facades\DB;
 
 
 class GenieController extends Controller
@@ -239,4 +240,43 @@ public function toggleNewArrival(Request $request)
 
     return view('Genie.vendorshow', compact('vendors'));
 }
+
+public function orders()
+{
+    // Fetch all orders with user info
+    $orders = DB::table('orders')
+        ->join('users', 'orders.user_id', '=', 'users.id')
+        ->select(
+            'orders.id as order_id',
+            'orders.order_number',
+            'orders.subtotal',
+            'orders.discount',
+            'orders.tax',
+            'orders.total_amount',  // matches migration
+            'orders.payment_method',
+            'orders.status',        // matches migration
+            'orders.created_at',
+            'users.name as customer_name',
+            'users.email as customer_email'
+        )
+        ->orderBy('orders.created_at', 'desc')
+        ->get();
+
+    // Fetch order items for each order
+    $orderItems = DB::table('order_items')
+        ->join('products', 'order_items.product_id', '=', 'products.id')
+        ->select(
+            'order_items.order_id',
+            'products.name as product_name',
+            'order_items.quantity',
+            'order_items.price'
+        )
+        ->get()
+        ->groupBy('order_id'); // group items by order
+
+    // Pass orders and their items to the admin view
+    return view('genie.orders', compact('orders', 'orderItems'));
+}
+
+
 }

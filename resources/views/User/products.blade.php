@@ -207,17 +207,43 @@ $(document).ready(function(){
 
 {{-- CSS for badges --}}
 <style>
-.sale-badge, .best-badge, .new-badge {
-    position: relative;
-    display: inline-block;
-    padding: 0.25rem 0.75rem;
-    font-size: 0.75rem;
-    transform: rotate(-45deg);
-    transform-origin: top left;
+/* Badge container */
+.position-absolute.top-0.start-0 {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem; /* spacing between badges */
+    padding: 0.5rem; /* some padding from top-left corner */
+    z-index: 10;
 }
-.sale-badge { background-color: #ff2a95ff; }
-.best-badge { background-color: #0d6efd; }
-.new-badge { background-color: #198754; }
+
+/* Common badge styles */
+.sale-badge,
+.best-badge,
+.new-badge {
+    display: inline-block;
+    padding: 0.25rem 0.6rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #fff;
+    border-radius: 0.25rem;
+    text-align: center;
+    transform: rotate(-15deg);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Specific badge colors */
+.sale-badge {
+    background: #ff2a95;
+}
+
+.best-badge {
+    background: #0d6efd;
+}
+
+.new-badge {
+    background: #198754;
+}
+
 </style>
 
 @endsection
