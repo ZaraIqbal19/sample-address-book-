@@ -90,7 +90,7 @@
 /* ===== TITLE (HOT PINK) ===== */
 .vendor-title {
     font-weight: 700;
-    color: #e91e63; /* HOT PINK */
+    color: #0a0a0aff; /* HOT PINK */
     letter-spacing: 0.4px;
 }
 

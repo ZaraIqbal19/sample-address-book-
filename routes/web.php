@@ -8,14 +8,12 @@ use App\Http\Middleware\GenieMiddleware;
 // ----------------------------
 // Public routes
 // ----------------------------
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+    // User home page
+Route::get('/', [UserController::class, 'index'])->name('user.home');
 
-// Sample page (public)
-Route::get('/sample', function () {
-    return view('genie.sample insertion');
-});
 Route::middleware([GenieMiddleware::class])->group(function () {
 
     // Genie Dashboard
@@ -64,7 +62,15 @@ Route::middleware([GenieMiddleware::class])->group(function () {
            Route::get('/genie/vendorshow', [GenieController::class, 'vendorshow'])
         ->name('genie.vendorshow');
             Route::get('/genie/orders', [GenieController::class, 'orders'])->name('genie.orders');
-Route::get('/genie/profile', function () {return view('genie.profile');});
+Route::get('/genie/profile', function () {
+    return view('genie.profile');
+})->name('genie.profile'); // ✅ Add this
+  Route::get('/genie/profileedit', [GenieController::class, 'profile'])
+         ->name('genie.profileEdit');
+
+    Route::put('/genie/profile/update', [GenieController::class, 'updateProfile'])
+         ->name('genie.profile.update');
+         
 });
 
 Route::middleware([
@@ -81,8 +87,7 @@ Route::middleware([
         return redirect()->route('user.home');
     })->name('dashboard');
 
-    // User home page
-Route::get('/home', [UserController::class, 'index'])->name('user.home');
+
 
 
     // User products
@@ -96,7 +101,6 @@ Route::delete('/cart/remove', [UserController::class, 'removeCart'])->name('cart
 Route::get('/product-description/{product}', 
     [UserController::class, 'productDescription']
 )->name('product.description');
-Route::post('/wishlist/toggle', [UserController::class, 'toggleWishlist']);
 Route::get('/cart', [UserController::class, 'cart'])->name('cart.view');
 Route::get('/checkout', [App\Http\Controllers\UserController::class, 'checkout'])
      ->name('checkout.index');
@@ -105,5 +109,9 @@ Route::get('/checkout', [App\Http\Controllers\UserController::class, 'checkout']
      // routes/web.php
 Route::get('/contact', [UserController::class, 'showContactForm'])->name('contact.show');
 Route::post('/contact', [UserController::class, 'submitContactForm'])->name('contact.submit');
-
+    Route::get('/my-orders', [UserController::class, 'ordershow'])
+        ->name('user.my orders');
+        Route::get('/about', function () {
+    return view('user.about us');
+});
 });

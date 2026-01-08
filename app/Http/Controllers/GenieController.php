@@ -234,12 +234,13 @@ public function toggleNewArrival(Request $request)
 
         return redirect()->back()->with('success', 'Vendor added successfully');
     }
-    public function vendorshow()
+  public function vendorshow()
 {
     $vendors = Vendor::with('subcategory.products')->get();
 
-    return view('Genie.vendorshow', compact('vendors'));
+    return view('genie.vendorshow', compact('vendors'));
 }
+
 
 public function orders()
 {
@@ -277,6 +278,39 @@ public function orders()
     // Pass orders and their items to the admin view
     return view('genie.orders', compact('orders', 'orderItems'));
 }
+public function profile() // loads edit form
+{
+    $user = auth()->user(); // fetch the logged-in user
+    return view('genie.profileEdit', compact('user')); // pass user to Blade
+}
 
+
+    // Update Profile Logic
+    public function updateProfile(Request $request)
+    {
+        $user = auth()->user();
+
+        // Validation
+        $request->validate([
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|email|unique:users,email,' . $user->id,
+            'password' => 'nullable|min:6|confirmed',
+        ]);
+
+        // Update basic info
+        $user->name  = $request->name;
+        $user->email = $request->email;
+
+        // Update password only if provided
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+
+        return redirect()
+            ->route('genie.profile')
+            ->with('success', 'Profile updated successfully');
+    }
 
 }

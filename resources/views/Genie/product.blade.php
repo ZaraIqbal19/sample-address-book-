@@ -4,11 +4,11 @@
 @section('content')
 <div class="container my-5">
     <div class="row justify-content-center">
-        <div class="col-lg-6 col-md-8">
+        <div class="col-lg-8 col-md-8">
 
             <div class="card shadow border-0 rounded-4">
-                <div class="card-header bg-primary text-white rounded-top-4">
-                    <h5 class="mb-0 text-center">Upload Product</h5>
+                <div class="card-header bg-primary text-black rounded-top-4">
+                    <h5 class="mb-0 text-center text-white fw-bold text-uppercase">product uploading form</h5>
                 </div>
 
                 <div class="card-body p-4">
